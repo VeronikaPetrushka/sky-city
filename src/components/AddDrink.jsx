@@ -7,7 +7,7 @@ import Icons from "./Icons";
 
 const { height } = Dimensions.get('window')
 
-const AddNorm = () => {
+const AddDrink = () => {
     const navigation = useNavigation();
     const [name, setName] = useState(null);
     const [size, setSize] = useState(null);
@@ -517,4 +517,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default AddNorm;
+export default AddDrink;

@@ -59,6 +59,12 @@ const Icons = ({ type, active, selected }) => {
     case 'norm':
       imageSource = require('../assets/icons/norm.png');
       break;
+    case 'bottle':
+      imageSource = require('../assets/icons/bottle.png');
+      break;
+    case 'arrow':
+      imageSource = require('../assets/icons/arrow.png');
+      break;
   }
 
   return (

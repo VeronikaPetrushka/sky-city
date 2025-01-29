@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Dimensions, Image, ScrollView } from "react-native";
+import { View, TouchableOpacity, Text, StyleSheet, Dimensions, Image, Modal } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icons from './Icons';
@@ -10,6 +10,8 @@ const Tracker = () => {
     const navigation = useNavigation();
     const [drinks, setDrinks] = useState([]);
     const [groupedDrinks, setGroupedDrinks] = useState({});
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedDrink, setSelectedDrink] = useState(null);
 
     const fetchDrinks = async () => {
         try {
@@ -63,6 +65,20 @@ const Tracker = () => {
         }, [])
     );
 
+    const handleDeleteDrink = async () => {
+        try {
+            const updatedDrinks = drinks.filter(drink => drink !== selectedDrink);
+            await AsyncStorage.setItem('drinks', JSON.stringify(updatedDrinks));
+            setDrinks(updatedDrinks);
+            setIsModalVisible(false);
+
+            await fetchDrinks();
+
+        } catch (error) {
+            console.error('Error deleting drink from storage:', error);
+        }
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.upperContainer}>
@@ -87,7 +103,13 @@ const Tracker = () => {
                         <View key={index} style={styles.drinkCard}>
                             <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 12}}>
                                 <Text style={styles.drinkName}>{drink.name}</Text>
-                                <TouchableOpacity style={{width: 24, height: 24}}>
+                                <TouchableOpacity 
+                                    style={{width: 24, height: 24}}
+                                    onPress={() => {
+                                        setSelectedDrink(drink);
+                                        setIsModalVisible(true);
+                                    }}
+                                    >
                                     <Icons type={'dots'} />
                                 </TouchableOpacity>
                             </View>
@@ -101,6 +123,33 @@ const Tracker = () => {
             ))}
 
             <View style={{height: 200}} />
+
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={isModalVisible}
+                onRequestClose={() => setIsModalVisible(false)}
+            >
+                <View style={styles.modalBackground}>
+                    <View style={styles.modalContainer}>
+                        <Text style={styles.modalTitle}>Delete drink</Text>
+                        <Text style={styles.modalText}>Are you sure you want to delete this drink record?</Text>
+                        <TouchableOpacity 
+                            style={[styles.modalButton, {borderTopColor: '#808080', borderBottomColor: '#808080', borderTopWidth: 0.33, borderBottomWidth: 0.33}]} 
+                            onPress={handleDeleteDrink}
+                        >
+                            <Text style={[styles.modalButtonText, {color: '#ed0103'}]}>Delete</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                            style={styles.modalButton} 
+                            onPress={() => setIsModalVisible(false)}
+                        >
+                            <Text style={[styles.modalButtonText, {color: '#b58c32'}]}>Cancel</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+
         </View>
     );
 };
@@ -205,6 +254,54 @@ const styles = StyleSheet.create({
         color: '#fff',
         lineHeight: 14.32,
     },
+
+    modalBackground: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+
+    modalContainer: {
+        width: '80%',
+        padding: 16,
+        paddingBottom: 0,
+        backgroundColor: '#2c2c2c',
+        borderRadius: 14,
+        alignItems: 'center',
+    },
+
+    modalTitle: {
+        fontSize: 17,
+        fontWeight: '600',
+        lineHeight: 22,
+        marginBottom: 5,
+        textAlign: 'center',
+        color: '#fff'
+    },
+
+    modalText: {
+        fontSize: 15,
+        fontWeight: '400',
+        lineHeight: 22,
+        marginBottom: 16,
+        textAlign: 'center',
+        color: '#fff'
+    },
+
+    modalButton: {
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 11,
+    },
+
+    modalButtonText: {
+        fontSize: 15,
+        fontWeight: '400',
+        lineHeight: 22,
+    },
+
 });
 
 export default Tracker;

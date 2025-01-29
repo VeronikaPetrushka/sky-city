@@ -9,6 +9,16 @@ const { height } = Dimensions.get('window');
 const Norm = () => {
     const navigation = useNavigation();
     const [norm, setNorm] = useState(null);
+    const [score, setScore] = useState(0);
+
+    const fetchScore = async () => {
+        try {
+            const storedScore = await AsyncStorage.getItem('score');
+            setScore(storedScore ? parseInt(storedScore, 10) : 0);
+        } catch (error) {
+            console.error('Error fetching score from storage:', error);
+        }
+    };
 
     const fetchNorm = async () => {
         try {
@@ -23,6 +33,7 @@ const Norm = () => {
     
     useFocusEffect(
         useCallback(() => {
+            fetchScore();
             fetchNorm();
         }, [])
     );
@@ -32,7 +43,7 @@ const Norm = () => {
             <View style={styles.upperContainer}>
                 <Text style={styles.title}>Water Norm</Text>
                 <View style={styles.waterNormBox}>
-                    <Text style={styles.waterNorm}>{norm?.norm}</Text>
+                    <Text style={styles.waterNorm}>{score}</Text>
                     <View style={{width: 21, height: 21, marginLeft: 7}}>
                         <Icons type={'norm'} />
                     </View>

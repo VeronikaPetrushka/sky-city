@@ -9,6 +9,12 @@ import AddNormScreen from './src/screens/AddNormScreen';
 import AddDrinkScreen from './src/screens/AddDrinkScreen';
 import AllDrinksScreen from './src/screens/AllDrinksScreen';
 import NormScreen from './src/screens/NormScreen';
+import CalendarScreen from './src/screens/CalendarScreen';
+import BuyLocationsScreen from './src/screens/BuyLocationsScreen';
+import SettingsScreen from './src/screens/SettingsScreen';
+import AchievementsScreen from './src/screens/AchievementsScreen';
+import GoalsScreen from './src/screens/GoalsScreen';
+import AddGoalScreen from './src/screens/AddGoalScreen';
 
 enableScreens();
 
@@ -69,6 +75,36 @@ const App = () => {
                   <Stack.Screen 
                       name="NormScreen" 
                       component={NormScreen} 
+                      options={{ headerShown: false }} 
+                  />
+                  <Stack.Screen 
+                      name="CalendarScreen" 
+                      component={CalendarScreen} 
+                      options={{ headerShown: false }} 
+                  />
+                  <Stack.Screen 
+                      name="BuyLocationsScreen" 
+                      component={BuyLocationsScreen} 
+                      options={{ headerShown: false }} 
+                  />
+                  <Stack.Screen 
+                      name="SettingsScreen" 
+                      component={SettingsScreen} 
+                      options={{ headerShown: false }} 
+                  />
+                  <Stack.Screen 
+                      name="AchievementsScreen" 
+                      component={AchievementsScreen} 
+                      options={{ headerShown: false }} 
+                  />
+                  <Stack.Screen 
+                      name="GoalsScreen" 
+                      component={GoalsScreen} 
+                      options={{ headerShown: false }} 
+                  />
+                  <Stack.Screen 
+                      name="AddGoalScreen" 
+                      component={AddGoalScreen} 
                       options={{ headerShown: false }} 
                   />
               </Stack.Navigator>
