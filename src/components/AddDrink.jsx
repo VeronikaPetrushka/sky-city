@@ -115,9 +115,9 @@ const AddDrink = () => {
 
             {
                 saved ? (
-                    <View style={{width: '100%', alignItems: 'center'}}>
+                    <View style={{width: '100%', height: '90%', alignItems: 'center'}}>
                         <Text style={styles.title}>New drink is successfully added</Text>
-                        <View style={{width: 255, height: 285}}>
+                        <View style={{width: 255, height: 285, marginVertical: 'auto'}}>
                             <Image source={require('../assets/decor/saved.png')} style={{width: '100%', height: '100%', resizeMode: 'contain'}} />
                             <View style={styles.savedNormContainer}>
                                 <Image source={require('../assets/decor/success.png')} style={{width: 130, height: 130, resizeMode: 'contain'}} />

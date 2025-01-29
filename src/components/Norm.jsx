@@ -52,7 +52,7 @@ const Norm = () => {
 
             {
                 norm ? (
-                    <View style={{width: 255, height: 285, marginTop: 50}}>
+                    <View style={{width: 255, height: 285, marginVertical: 'auto'}}>
                         <Image source={require('../assets/decor/saved.png')} style={{width: '100%', height: '100%', resizeMode: 'contain'}} />
                         <View style={styles.savedNormContainer}>
                             <Text style={styles.normText}>{norm.norm} ml</Text>
@@ -60,7 +60,7 @@ const Norm = () => {
                         </View>
                     </View>
                 ) : (
-                    <View style={{width: '100%', alignItems: 'center', marginTop: height * 0.1}}>
+                    <View style={{width: '100%', alignItems: 'center', marginVertical: 'auto'}}>
                         <Image source={require('../assets/decor/water.png')} style={styles.noImage} />
                         <Text style={styles.noText}>There is no information about your daily water norm</Text>
                     </View>

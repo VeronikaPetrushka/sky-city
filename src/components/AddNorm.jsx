@@ -8,12 +8,12 @@ const { height } = Dimensions.get('window')
 
 const AddNorm = ({ item }) => {
     const navigation = useNavigation();
-    const [goal, setGoal] = useState(item.goal || 'Maintenance');
-    const [height, setHeight] = useState(item.height || null);
-    const [weight, setWeight] = useState(item.weight || null);
-    const [isExcess, setIsExcess] = useState(item.isExcess || true);
+    const [goal, setGoal] = useState(item?.goal || 'Maintenance');
+    const [height, setHeight] = useState(item?.height || null);
+    const [weight, setWeight] = useState(item?.weight || null);
+    const [isExcess, setIsExcess] = useState(item?.isExcess || true);
     const [saved, setSaved] = useState(false);
-    const [norm, setNorm] = useState(item.norm || null);
+    const [norm, setNorm] = useState(item?.norm || null);
 
     const resetInput = (setter) => {
         setter('');
@@ -88,9 +88,9 @@ const AddNorm = ({ item }) => {
 
             {
                 saved ? (
-                    <View style={{width: '100%', alignItems: 'center'}}>
+                    <View style={{width: '100%', height: '90%', alignItems: 'center',}}>
                         <Text style={styles.title}>{item ? 'Your water norm is updated' : 'Your water norm is created'}</Text>
-                        <View style={{width: 255, height: 285}}>
+                        <View style={{width: 255, height: 285, marginVertical: 'auto'}}>
                             <Image source={require('../assets/decor/saved.png')} style={{width: '100%', height: '100%', resizeMode: 'contain'}} />
                             <View style={styles.savedNormContainer}>
                                 <Text style={styles.normText}>{norm} ml</Text>
@@ -177,7 +177,7 @@ const AddNorm = ({ item }) => {
 
             <TouchableOpacity 
                 style={[styles.saveBtn, 
-                    !height || !weight && {backgroundColor: '#2a2a2a'}, 
+                    !height || !weight && {backgroundColor: '#2c2c2c2'}, 
                     saved && {backgroundColor: '#b58c32'}
                 ]} 
                 onPress={saved ? navigation.goBack : handleSave}

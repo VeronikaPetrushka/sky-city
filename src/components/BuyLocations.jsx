@@ -108,6 +108,12 @@ const BuyLocations = () => {
                             <Text style={styles.btnText}>
                                 {locationsStatus[index]?.chosen ? 'Chosen' : locationsStatus[index]?.purchased ? 'Purchased' : '2000'}
                             </Text>
+                            {   !locationsStatus[index]?.chosen && !locationsStatus[index]?.purchased && (
+                                <View style={{width: 20, height: 20, marginLeft: 4}}>
+                                    <Icons type={'norm'} />
+                                </View>
+                            )
+                            }
                             </TouchableOpacity>
                         </View>
                     ))
@@ -163,7 +169,9 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         paddingHorizontal: 12,
         borderRadius: 20,
-        backgroundColor: '#2a2a2a'
+        backgroundColor: '#2a2a2a',
+        flexDirection: 'row',
+        alignItems: 'center'
     },
 
     btnText: {

@@ -10,7 +10,7 @@ workflows:
             distribution_type: app_store
             bundle_identifier: com.skyWaterCity2024
           vars:
-            APP_STORE_APPLE_ID: 6740922984 #change
+            APP_STORE_APPLE_ID: 6741143784
             BUNDLE_ID: "com.skyWaterCity2024"
             XCODE_WORKSPACE: "SkyCity.xcworkspace"
             XCODE_SCHEME: "SkyCity"

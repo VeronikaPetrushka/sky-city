@@ -119,10 +119,28 @@ const Tracker = () => {
             )}
 
             {
-                !norm && (
+                !norm && todayDrinks.length === 0 && (
+                    <View style={{width: '100%', alignItems: 'center', marginTop: height * 0.1}}>
+                        <Image source={require('../assets/decor/water.png')} style={styles.noImage} />
+                        <Text style={styles.noText}>There is no information about your daily water norm and water intakes</Text>
+                    </View>
+                )
+            }
+
+            {
+                !norm && todayDrinks.length > 0 && (
                     <View style={{width: '100%', alignItems: 'center', marginTop: height * 0.1}}>
                         <Image source={require('../assets/decor/water.png')} style={styles.noImage} />
                         <Text style={styles.noText}>There is no information about your daily water norm</Text>
+                    </View>
+                )
+            }
+
+            {
+                todayDrinks.length === 0 && norm && (
+                    <View style={{width: '100%', alignItems: 'center', marginTop: height * 0.1}}>
+                        <Image source={require('../assets/decor/water.png')} style={styles.noImage} />
+                        <Text style={styles.noText}>There is no information about your water intakes</Text>
                     </View>
                 )
             }
@@ -132,15 +150,6 @@ const Tracker = () => {
                     <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('AddNormScreen')}>
                         <Text style={styles.addBtnText}>Add information</Text>
                     </TouchableOpacity>    
-                )
-            }
-
-            {
-                todayDrinks.length === 0 && (
-                    <View style={{width: '100%', alignItems: 'center', marginTop: height * 0.1}}>
-                        <Image source={require('../assets/decor/water.png')} style={styles.noImage} />
-                        <Text style={styles.noText}>There aren’t any drinks on this day, please add something</Text>
-                    </View>    
                 )
             }
 

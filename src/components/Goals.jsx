@@ -336,8 +336,8 @@ const styles= StyleSheet.create({
 
     date: {
         fontSize: 12,
-        fontWeight: '400',
-        color: '#fff',
+        fontWeight: '300',
+        color: '#999',
         lineHeight: 14.32,
     },
 
