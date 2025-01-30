@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Dimensions, Image, ScrollView, Modal } from "react-native"
+import { View, TouchableOpacity, Text, StyleSheet, Dimensions, Image, ScrollView, Modal, ImageBackground } from "react-native"
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Progress from 'react-native-progress';
@@ -84,141 +84,143 @@ const Tracker = () => {
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.upperContainer}>
-                <Text style={styles.title}>Water Tracker</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('AllDrinksScreen')}>
-                    <Text style={styles.dateBtn}>{new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}</Text>
-                </TouchableOpacity>
+        <ImageBackground source={require('../assets/back.png')} style={{flex: 1}}>
+            <View style={styles.container}>
+                <View style={styles.upperContainer}>
+                    <Text style={styles.title}>Water Tracker</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('AllDrinksScreen')}>
+                        <Text style={styles.dateBtn}>{new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}</Text>
+                    </TouchableOpacity>
+                </View>
+
+                {
+                    norm && todayDrinks.length > 0 && (
+                        <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 8}}>
+                            <Text style={styles.normText}>{totalDrinkSize} ml</Text>
+                            <Text style={styles.normText}>{norm.norm} ml</Text>
+                        </View>    
+                    )
+                }
+
+                { norm && todayDrinks.length > 0 && (
+                    <View style={styles.progressContainer}>
+                        <Progress.Bar
+                            progress={progress}
+                            width={width * 0.87}
+                            height={44}
+                            color="#222be6"
+                            borderWidth={0}
+                            borderRadius={12}
+                            style={styles.progressBar}
+                        />
+                        <Text style={styles.progressText}>
+                            {Math.min(progress * 100, 100).toFixed(1)}%
+                        </Text>
+                    </View>
+                )}
+
+                {
+                    !norm && todayDrinks.length === 0 && (
+                        <View style={{width: '100%', alignItems: 'center', marginTop: height * 0.1}}>
+                            <Image source={require('../assets/decor/water.png')} style={styles.noImage} />
+                            <Text style={styles.noText}>There is no information about your daily water norm and water intakes</Text>
+                        </View>
+                    )
+                }
+
+                {
+                    !norm && todayDrinks.length > 0 && (
+                        <View style={{width: '100%', alignItems: 'center', marginTop: height * 0.1}}>
+                            <Image source={require('../assets/decor/water.png')} style={styles.noImage} />
+                            <Text style={styles.noText}>There is no information about your daily water norm</Text>
+                        </View>
+                    )
+                }
+
+                {
+                    todayDrinks.length === 0 && norm && (
+                        <View style={{width: '100%', alignItems: 'center', marginTop: height * 0.1}}>
+                            <Image source={require('../assets/decor/water.png')} style={styles.noImage} />
+                            <Text style={styles.noText}>There is no information about your water intakes</Text>
+                        </View>
+                    )
+                }
+
+                {
+                    !norm && (
+                        <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('AddNormScreen')}>
+                            <Text style={styles.addBtnText}>Add information</Text>
+                        </TouchableOpacity>    
+                    )
+                }
+
+                {
+                    norm && (
+                        <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('AddDrinkScreen')}>
+                            <Text style={styles.addBtnText}>Add drinks</Text>
+                        </TouchableOpacity>       
+                    )
+                }
+
+                {
+                    todayDrinks.length > 0 && (
+                        <ScrollView style={{width: '100%'}}>
+                            {
+                                todayDrinks.map((drink, index) => (
+                                    <View key={index} style={styles.drinkCard}>
+                                        <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 12}}>
+                                            <Text style={styles.drinkName}>{drink.name}</Text>
+                                            <TouchableOpacity 
+                                                style={{width: 24, height: 24}}
+                                                onPress={() => {
+                                                    setSelectedDrink(drink);
+                                                    setIsModalVisible(true);
+                                                }}
+                                                >
+                                                <Icons type={'dots'} />
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
+                                            <Text style={styles.drinkInfo}>{drink.type} / {drink.size}</Text>
+                                            <Text style={styles.drinkTime}>{drink.time}</Text>
+                                        </View>
+                                    </View>
+                                ))
+                            }
+
+                            <View style={{height: 250}} />
+                        </ScrollView>
+                    )
+                }
+
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={isModalVisible}
+                    onRequestClose={() => setIsModalVisible(false)}
+                >
+                    <View style={styles.modalBackground}>
+                        <View style={styles.modalContainer}>
+                            <Text style={styles.modalTitle}>Delete drink</Text>
+                            <Text style={styles.modalText}>Are you sure you want to delete this drink record?</Text>
+                            <TouchableOpacity 
+                                style={[styles.modalButton, {borderTopColor: '#808080', borderBottomColor: '#808080', borderTopWidth: 0.33, borderBottomWidth: 0.33}]} 
+                                onPress={handleDeleteDrink}
+                            >
+                                <Text style={[styles.modalButtonText, {color: '#ed0103'}]}>Delete</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                                style={styles.modalButton} 
+                                onPress={() => setIsModalVisible(false)}
+                            >
+                                <Text style={[styles.modalButtonText, {color: '#b58c32'}]}>Cancel</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+
             </View>
-
-            {
-                norm && todayDrinks.length > 0 && (
-                    <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 8}}>
-                        <Text style={styles.normText}>{totalDrinkSize} ml</Text>
-                        <Text style={styles.normText}>{norm.norm} ml</Text>
-                    </View>    
-                )
-            }
-
-            { norm && todayDrinks.length > 0 && (
-                <View style={styles.progressContainer}>
-                     <Progress.Bar
-                        progress={progress}
-                        width={width * 0.87}
-                        height={44}
-                        color="#222be6"
-                        borderWidth={0}
-                        borderRadius={12}
-                        style={styles.progressBar}
-                    />
-                    <Text style={styles.progressText}>
-                        {Math.min(progress * 100, 100).toFixed(1)}%
-                    </Text>
-                </View>
-            )}
-
-            {
-                !norm && todayDrinks.length === 0 && (
-                    <View style={{width: '100%', alignItems: 'center', marginTop: height * 0.1}}>
-                        <Image source={require('../assets/decor/water.png')} style={styles.noImage} />
-                        <Text style={styles.noText}>There is no information about your daily water norm and water intakes</Text>
-                    </View>
-                )
-            }
-
-            {
-                !norm && todayDrinks.length > 0 && (
-                    <View style={{width: '100%', alignItems: 'center', marginTop: height * 0.1}}>
-                        <Image source={require('../assets/decor/water.png')} style={styles.noImage} />
-                        <Text style={styles.noText}>There is no information about your daily water norm</Text>
-                    </View>
-                )
-            }
-
-            {
-                todayDrinks.length === 0 && norm && (
-                    <View style={{width: '100%', alignItems: 'center', marginTop: height * 0.1}}>
-                        <Image source={require('../assets/decor/water.png')} style={styles.noImage} />
-                        <Text style={styles.noText}>There is no information about your water intakes</Text>
-                    </View>
-                )
-            }
-
-            {
-                !norm && (
-                    <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('AddNormScreen')}>
-                        <Text style={styles.addBtnText}>Add information</Text>
-                    </TouchableOpacity>    
-                )
-            }
-
-            {
-                norm && (
-                    <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('AddDrinkScreen')}>
-                        <Text style={styles.addBtnText}>Add drinks</Text>
-                    </TouchableOpacity>       
-                )
-            }
-
-            {
-                todayDrinks.length > 0 && (
-                    <ScrollView style={{width: '100%'}}>
-                        {
-                            todayDrinks.map((drink, index) => (
-                                <View key={index} style={styles.drinkCard}>
-                                    <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 12}}>
-                                        <Text style={styles.drinkName}>{drink.name}</Text>
-                                        <TouchableOpacity 
-                                            style={{width: 24, height: 24}}
-                                            onPress={() => {
-                                                setSelectedDrink(drink);
-                                                setIsModalVisible(true);
-                                            }}
-                                            >
-                                            <Icons type={'dots'} />
-                                        </TouchableOpacity>
-                                    </View>
-                                    <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
-                                        <Text style={styles.drinkInfo}>{drink.type} / {drink.size}</Text>
-                                        <Text style={styles.drinkTime}>{drink.time}</Text>
-                                    </View>
-                                </View>
-                            ))
-                        }
-
-                        <View style={{height: 250}} />
-                    </ScrollView>
-                )
-            }
-
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={isModalVisible}
-                onRequestClose={() => setIsModalVisible(false)}
-            >
-                <View style={styles.modalBackground}>
-                    <View style={styles.modalContainer}>
-                        <Text style={styles.modalTitle}>Delete drink</Text>
-                        <Text style={styles.modalText}>Are you sure you want to delete this drink record?</Text>
-                        <TouchableOpacity 
-                            style={[styles.modalButton, {borderTopColor: '#808080', borderBottomColor: '#808080', borderTopWidth: 0.33, borderBottomWidth: 0.33}]} 
-                            onPress={handleDeleteDrink}
-                        >
-                            <Text style={[styles.modalButtonText, {color: '#ed0103'}]}>Delete</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                            style={styles.modalButton} 
-                            onPress={() => setIsModalVisible(false)}
-                        >
-                            <Text style={[styles.modalButtonText, {color: '#b58c32'}]}>Cancel</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
-
-        </View>
+        </ImageBackground>
     )
 };
 
@@ -226,7 +228,6 @@ const styles= StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#000',
         padding: 20,
         paddingTop: height * 0.07,
         alignItems: 'center'

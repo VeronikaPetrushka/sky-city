@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Dimensions, Linking } from "react-native"
+import { View, TouchableOpacity, Text, StyleSheet, Dimensions, Linking, ImageBackground } from "react-native"
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icons from './Icons';
@@ -31,47 +31,49 @@ const Settings = () => {
     };   
 
     return (
-        <View style={styles.container}>
+        <ImageBackground source={require('../assets/back.png')} style={{flex: 1}}>
+            <View style={styles.container}>
 
-            <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 33}}>
-                <Text style={styles.title}>Settings</Text>
-                <View style={{alignItems: 'center', flexDirection: 'row'}}>
-                    <Text style={styles.score}>{score}</Text>
-                    <View style={{width: 21, height: 21, marginLeft: 7}}>
-                        <Icons type={'norm'} />
+                <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 33}}>
+                    <Text style={styles.title}>Settings</Text>
+                    <View style={{alignItems: 'center', flexDirection: 'row'}}>
+                        <Text style={styles.score}>{score}</Text>
+                        <View style={{width: 21, height: 21, marginLeft: 7}}>
+                            <Icons type={'norm'} />
+                        </View>
                     </View>
                 </View>
-            </View>
 
-            <View style={styles.btn}>
-                <Text style={styles.btnText}>Personal goals</Text>
-                <TouchableOpacity 
-                    style={{width: 12, height: 24}}
-                    onPress={() => navigation.navigate('GoalsScreen')}
-                    >
-                    <Icons type={'arrow'} />
-                </TouchableOpacity>
-            </View>
-            <View style={styles.btn}>
-                <Text style={styles.btnText}>Achievements</Text>
-                <TouchableOpacity 
-                    style={{width: 12, height: 24}}
-                    onPress={() => navigation.navigate('AchievementsScreen')}
-                    >
-                    <Icons type={'arrow'} />
-                </TouchableOpacity>
-            </View>
-            <View style={styles.btn}>
-                <Text style={styles.btnText}>Privacy policy</Text>
-                <TouchableOpacity 
-                    style={{width: 12, height: 24}}
-                    onPress={privacyPolicy}
-                    >
-                    <Icons type={'arrow'} />
-                </TouchableOpacity>
-            </View>
+                <View style={styles.btn}>
+                    <Text style={styles.btnText}>Personal goals</Text>
+                    <TouchableOpacity 
+                        style={{width: 12, height: 24}}
+                        onPress={() => navigation.navigate('GoalsScreen')}
+                        >
+                        <Icons type={'arrow'} />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.btn}>
+                    <Text style={styles.btnText}>Achievements</Text>
+                    <TouchableOpacity 
+                        style={{width: 12, height: 24}}
+                        onPress={() => navigation.navigate('AchievementsScreen')}
+                        >
+                        <Icons type={'arrow'} />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.btn}>
+                    <Text style={styles.btnText}>Privacy policy</Text>
+                    <TouchableOpacity 
+                        style={{width: 12, height: 24}}
+                        onPress={privacyPolicy}
+                        >
+                        <Icons type={'arrow'} />
+                    </TouchableOpacity>
+                </View>
 
-        </View>
+            </View>
+        </ImageBackground>
     )
 };
 
@@ -79,7 +81,6 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#000',
         padding: 16,
         paddingTop: height * 0.07
     },

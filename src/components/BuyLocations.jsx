@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { StyleSheet, View, Dimensions, TouchableOpacity, Text, Image, ScrollView, Alert } from "react-native"
+import { StyleSheet, View, Dimensions, TouchableOpacity, Text, Image, ScrollView, Alert, ImageBackground } from "react-native"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import Icons from "./Icons";
@@ -83,44 +83,46 @@ const BuyLocations = () => {
     };
     
     return (
-        <View style={styles.container}>
-            <TouchableOpacity 
-                style={{alignSelf: 'flex-start', alignItems: 'center', marginBottom: 20, flexDirection: 'row'}}
-                onPress={() => navigation.goBack('')}
-                >
-                <View style={{height: 17, width: 12, marginRight: 10}}>
-                    <Icons type={'back'} />
-                </View>
-                <Text style={styles.backText}>Back</Text>
-            </TouchableOpacity>
+        <ImageBackground source={require('../assets/back.png')} style={{flex: 1}}>
+            <View style={styles.container}>
+                <TouchableOpacity 
+                    style={{alignSelf: 'flex-start', alignItems: 'center', marginBottom: 20, flexDirection: 'row'}}
+                    onPress={() => navigation.goBack('')}
+                    >
+                    <View style={{height: 17, width: 12, marginRight: 10}}>
+                        <Icons type={'back'} />
+                    </View>
+                    <Text style={styles.backText}>Back</Text>
+                </TouchableOpacity>
 
-            <Text style={styles.title}>Locations</Text>
+                <Text style={styles.title}>Locations</Text>
 
-            <ScrollView style={{width: '100%'}}>
-                {
-                    locations.map((location, index) => (
-                        <View key={index} style={styles.card}>
-                            <Image source={location.location} style={styles.image} />
-                            <TouchableOpacity
-                                style={styles.btn}
-                                onPress={() => handlePress(index)}
-                            >
-                            <Text style={styles.btnText}>
-                                {locationsStatus[index]?.chosen ? 'Chosen' : locationsStatus[index]?.purchased ? 'Purchased' : '2000'}
-                            </Text>
-                            {   !locationsStatus[index]?.chosen && !locationsStatus[index]?.purchased && (
-                                <View style={{width: 20, height: 20, marginLeft: 4}}>
-                                    <Icons type={'norm'} />
-                                </View>
-                            )
-                            }
-                            </TouchableOpacity>
-                        </View>
-                    ))
-                }
-            </ScrollView>
+                <ScrollView style={{width: '100%'}}>
+                    {
+                        locations.map((location, index) => (
+                            <View key={index} style={styles.card}>
+                                <Image source={location.location} style={styles.image} />
+                                <TouchableOpacity
+                                    style={styles.btn}
+                                    onPress={() => handlePress(index)}
+                                >
+                                <Text style={styles.btnText}>
+                                    {locationsStatus[index]?.chosen ? 'Chosen' : locationsStatus[index]?.purchased ? 'Purchased' : '2000'}
+                                </Text>
+                                {   !locationsStatus[index]?.chosen && !locationsStatus[index]?.purchased && (
+                                    <View style={{width: 20, height: 20, marginLeft: 4}}>
+                                        <Icons type={'norm'} />
+                                    </View>
+                                )
+                                }
+                                </TouchableOpacity>
+                            </View>
+                        ))
+                    }
+                </ScrollView>
 
-        </View>
+            </View>
+        </ImageBackground>
     )
 };
 
@@ -128,8 +130,8 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#000',
         padding: 16,
+        paddingBottom: 0,
         paddingTop: height * 0.07,
     },
 

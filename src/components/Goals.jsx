@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Dimensions, Image, ScrollView, Modal } from "react-native"
+import { View, TouchableOpacity, Text, StyleSheet, Dimensions, Image, ScrollView, Modal, ImageBackground } from "react-native"
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icons from './Icons';
@@ -96,110 +96,112 @@ const Goals = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <ImageBackground source={require('../assets/back.png')} style={{flex: 1}}>
+            <View style={styles.container}>
 
-            <TouchableOpacity 
-                style={{alignSelf: 'flex-start', alignItems: 'center', marginBottom: 20, flexDirection: 'row'}}
-                onPress={() => navigation.goBack('')}
-                >
-                <View style={{height: 17, width: 12, marginRight: 10}}>
-                    <Icons type={'back'} />
-                </View>
-                <Text style={styles.backText}>Back</Text>
-            </TouchableOpacity>
-
-            <Text style={styles.title}>Personal goals</Text>
-
-            <View style={styles.goalBtnsContainer}>
                 <TouchableOpacity 
-                    style={[filteredGoals === goals ? styles.goalBtnChosen : styles.goalBtn]} 
-                    onPress={() => setFilteredGoals(goals)}
+                    style={{alignSelf: 'flex-start', alignItems: 'center', marginBottom: 20, flexDirection: 'row'}}
+                    onPress={() => navigation.goBack('')}
                     >
-                    <Text style={styles.goalBtnText}>In progress</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                    style={[filteredGoals === doneGoals ? styles.goalBtnChosen : styles.goalBtn]} 
-                    onPress={() => setFilteredGoals(doneGoals)}
-                    >
-                    <Text style={styles.goalBtnText}>Done</Text>
-                </TouchableOpacity>
-            </View>
-
-            {
-                filteredGoals === goals && goals.length > 0 || filteredGoals === doneGoals && doneGoals.length > 0 ? (
-                    <ScrollView style={{width: '100%'}}>
-                        {
-                            filteredGoals.map((goal, index) => (
-                                <View key={index} style={styles.card}>
-                                    <Text style={styles.name}>{goal.name}</Text>
-                                    <Text style={styles.description}>{goal.description}</Text>
-                                    <Text style={styles.date}>due to {goal.date}</Text>
-                                    <View style={styles.iconsContainer}>
-                                        <TouchableOpacity 
-                                            style={styles.toggleBtn} 
-                                            onPress={() => handleGoalAction(goal, index)}
-                                            >
-                                                {
-                                                    doneGoals.some(doneGoal => doneGoal.name === goal.name) && (
-                                                        <View style={{width: '100%', height: '100%'}}>
-                                                            <Icons type={'yes'} />
-                                                        </View>
-                                                    )
-                                                }
-                                        </TouchableOpacity>
-                                        <TouchableOpacity 
-                                            style={{width: 24, height: 12}}
-                                            onPress={() => {
-                                                setSelectedGoal(goal);
-                                                setIsModalVisible(true);
-                                            }}
-                                            >
-                                            <Icons type={'dots'} />
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            ))
-                        }
-                    </ScrollView>
-                ) : (
-                    <View style={{width: '100%', alignItems: 'center', marginTop: height * 0.1}}>
-                        <Image source={require('../assets/decor/water.png')} style={styles.noImage} />
-                        <Text style={styles.noText}>There aren’t any goals you add</Text>
-                    </View>    
-                )
-            }
-
-            <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('AddGoalScreen')}>
-                <Text style={styles.addBtnText}>Add new goal</Text>
-            </TouchableOpacity>   
-
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={isModalVisible}
-                onRequestClose={() => setIsModalVisible(false)}
-            >
-                <View style={styles.modalBackground}>
-                    <View style={styles.modalContainer}>
-                        <Text style={styles.modalTitle}>Delete goal</Text>
-                        <Text style={styles.modalText}>Are you sure you want to delete this goal record?</Text>
-                        <TouchableOpacity 
-                            style={[styles.modalButton, {borderTopColor: '#808080', borderBottomColor: '#808080', borderTopWidth: 0.33, borderBottomWidth: 0.33}]} 
-                            onPress={handleDeleteGoal}
-                        >
-                            <Text style={[styles.modalButtonText, {color: '#ed0103'}]}>Delete</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                            style={styles.modalButton} 
-                            onPress={() => setIsModalVisible(false)}
-                        >
-                            <Text style={[styles.modalButtonText, {color: '#b58c32'}]}>Cancel</Text>
-                        </TouchableOpacity>
+                    <View style={{height: 17, width: 12, marginRight: 10}}>
+                        <Icons type={'back'} />
                     </View>
-                </View>
-            </Modal>
+                    <Text style={styles.backText}>Back</Text>
+                </TouchableOpacity>
 
-        </View>
+                <Text style={styles.title}>Personal goals</Text>
+
+                <View style={styles.goalBtnsContainer}>
+                    <TouchableOpacity 
+                        style={[filteredGoals === goals ? styles.goalBtnChosen : styles.goalBtn]} 
+                        onPress={() => setFilteredGoals(goals)}
+                        >
+                        <Text style={styles.goalBtnText}>In progress</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        style={[filteredGoals === doneGoals ? styles.goalBtnChosen : styles.goalBtn]} 
+                        onPress={() => setFilteredGoals(doneGoals)}
+                        >
+                        <Text style={styles.goalBtnText}>Done</Text>
+                    </TouchableOpacity>
+                </View>
+
+                {
+                    filteredGoals === goals && goals.length > 0 || filteredGoals === doneGoals && doneGoals.length > 0 ? (
+                        <ScrollView style={{width: '100%'}}>
+                            {
+                                filteredGoals.map((goal, index) => (
+                                    <View key={index} style={styles.card}>
+                                        <Text style={styles.name}>{goal.name}</Text>
+                                        <Text style={styles.description}>{goal.description}</Text>
+                                        <Text style={styles.date}>due to {goal.date}</Text>
+                                        <View style={styles.iconsContainer}>
+                                            <TouchableOpacity 
+                                                style={styles.toggleBtn} 
+                                                onPress={() => handleGoalAction(goal, index)}
+                                                >
+                                                    {
+                                                        doneGoals.some(doneGoal => doneGoal.name === goal.name) && (
+                                                            <View style={{width: '100%', height: '100%'}}>
+                                                                <Icons type={'yes'} />
+                                                            </View>
+                                                        )
+                                                    }
+                                            </TouchableOpacity>
+                                            <TouchableOpacity 
+                                                style={{width: 24, height: 12}}
+                                                onPress={() => {
+                                                    setSelectedGoal(goal);
+                                                    setIsModalVisible(true);
+                                                }}
+                                                >
+                                                <Icons type={'dots'} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                ))
+                            }
+                        </ScrollView>
+                    ) : (
+                        <View style={{width: '100%', alignItems: 'center', marginTop: height * 0.1}}>
+                            <Image source={require('../assets/decor/water.png')} style={styles.noImage} />
+                            <Text style={styles.noText}>There aren’t any goals you add</Text>
+                        </View>    
+                    )
+                }
+
+                <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('AddGoalScreen')}>
+                    <Text style={styles.addBtnText}>Add new goal</Text>
+                </TouchableOpacity>   
+
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={isModalVisible}
+                    onRequestClose={() => setIsModalVisible(false)}
+                >
+                    <View style={styles.modalBackground}>
+                        <View style={styles.modalContainer}>
+                            <Text style={styles.modalTitle}>Delete goal</Text>
+                            <Text style={styles.modalText}>Are you sure you want to delete this goal record?</Text>
+                            <TouchableOpacity 
+                                style={[styles.modalButton, {borderTopColor: '#808080', borderBottomColor: '#808080', borderTopWidth: 0.33, borderBottomWidth: 0.33}]} 
+                                onPress={handleDeleteGoal}
+                            >
+                                <Text style={[styles.modalButtonText, {color: '#ed0103'}]}>Delete</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                                style={styles.modalButton} 
+                                onPress={() => setIsModalVisible(false)}
+                            >
+                                <Text style={[styles.modalButtonText, {color: '#b58c32'}]}>Cancel</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+
+            </View>
+        </ImageBackground>
     )
 };
 
@@ -207,7 +209,6 @@ const styles= StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#000',
         padding: 16,
         paddingTop: height * 0.07
     },

@@ -25,16 +25,28 @@ const App = () => {
 
     const loaderAnim = useRef(new Animated.Value(0)).current;
 
-    const loaderImg = require('./src/assets/loaders/1.png');
-    
+    const firstLoaderImage = require('./src/assets/loaders/1.png');
+    const secondLoaderImage = require('./src/assets/loaders/2.png');
+
+    const [currentLoader, setCurrentLoader] = useState(firstLoaderImage);
+
     useEffect(() => {
         Animated.timing(loaderAnim, {
             toValue: 1,
             duration: 1500,
             useNativeDriver: true,
         }).start(() => {
-                    setLoaderIsEnded(true);
-                });
+            setCurrentLoader(secondLoaderImage);
+
+            loaderAnim.setValue(0);
+            Animated.timing(loaderAnim, {
+                toValue: 1,
+                duration: 2000,
+                useNativeDriver: true,
+            }).start(() => {
+                setLoaderIsEnded(true);
+            });
+        });
     }, []);
     
     return (
@@ -42,10 +54,10 @@ const App = () => {
         {
             !loaderIsEnded ? (
                 <View style={{ flex: 1 }}>
-                    <ImageBackground style={{ flex: 1 }} source={loaderImg}>
+                    <ImageBackground style={{ flex: 1 }} source={currentLoader}>
                         <View style={styles.container}>
                             <Animated.View style={[styles.imageContainer, { opacity: loaderAnim }]}>
-                                <ImageBackground source={loaderImg} style={styles.image} />
+                                <ImageBackground source={currentLoader} style={styles.image} />
                             </Animated.View>
                         </View>
                     </ImageBackground>

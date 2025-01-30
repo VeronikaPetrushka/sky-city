@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Dimensions, TouchableOpacity, Text, TextInput, Image, ScrollView } from "react-native"
+import { StyleSheet, View, Dimensions, TouchableOpacity, Text, TextInput, Image, ScrollView, ImageBackground } from "react-native"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation } from "@react-navigation/native";
@@ -101,259 +101,261 @@ const AddDrink = () => {
     };
     
     return (
-        <View style={styles.container}>
+        <ImageBackground source={require('../assets/back.png')} style={{flex: 1}}>
+            <View style={styles.container}>
 
-            <TouchableOpacity 
-                style={{alignSelf: 'flex-start', alignItems: 'center', marginBottom: 20, flexDirection: 'row'}}
-                onPress={() => navigation.goBack('')}
-                >
-                <View style={{height: 17, width: 12, marginRight: 10}}>
-                    <Icons type={'back'} />
-                </View>
-                <Text style={styles.backText}>Back</Text>
-            </TouchableOpacity>
+                <TouchableOpacity 
+                    style={{alignSelf: 'flex-start', alignItems: 'center', marginBottom: 20, flexDirection: 'row'}}
+                    onPress={() => navigation.goBack('')}
+                    >
+                    <View style={{height: 17, width: 12, marginRight: 10}}>
+                        <Icons type={'back'} />
+                    </View>
+                    <Text style={styles.backText}>Back</Text>
+                </TouchableOpacity>
 
-            {
-                saved ? (
-                    <View style={{width: '100%', height: '90%', alignItems: 'center'}}>
-                        <Text style={styles.title}>New drink is successfully added</Text>
-                        <View style={{width: 255, height: 285, marginVertical: 'auto'}}>
-                            <Image source={require('../assets/decor/saved.png')} style={{width: '100%', height: '100%', resizeMode: 'contain'}} />
-                            <View style={styles.savedNormContainer}>
-                                <Image source={require('../assets/decor/success.png')} style={{width: 130, height: 130, resizeMode: 'contain'}} />
+                {
+                    saved ? (
+                        <View style={{width: '100%', height: '90%', alignItems: 'center'}}>
+                            <Text style={styles.title}>New drink is successfully added</Text>
+                            <View style={{width: 255, height: 285, marginVertical: 'auto'}}>
+                                <Image source={require('../assets/decor/saved.png')} style={{width: '100%', height: '100%', resizeMode: 'contain'}} />
+                                <View style={styles.savedNormContainer}>
+                                    <Image source={require('../assets/decor/success.png')} style={{width: 130, height: 130, resizeMode: 'contain'}} />
+                                </View>
                             </View>
                         </View>
-                    </View>
-                ) : (
-                    <View style={{width: '100%', alignItems: 'flex-start'}}>
-                        <Text style={styles.title}>Add new drink</Text>
+                    ) : (
+                        <View style={{width: '100%', alignItems: 'flex-start'}}>
+                            <Text style={styles.title}>Add new drink</Text>
 
-                        <ScrollView style={{width: '100%'}}>
-                            <Text style={styles.label}>Name of a drink</Text>
-                            <View style={styles.inputContainer}>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Name"
-                                    placeholderTextColor="#999"
-                                    value={name}
-                                    onChangeText={setName}
-                                />
-                                {name ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resetInput(setName)}>
-                                        <Icons type={'cross'} />
-                                    </TouchableOpacity>
-                                ) : null}
-                            </View>
-
-                            <Text style={styles.label}>Size</Text>
-                            <View style={styles.inputContainer}>
-                                <TextInput
-                                    style={styles.input}
-                                    keyboardType='numeric'
-                                    placeholder="Choose below or input own"
-                                    placeholderTextColor="#999"
-                                    value={size}
-                                    onChangeText={setSize}
-                                />
-                                {size ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resetInput(setSize)}>
-                                        <Icons type={'cross'} />
-                                    </TouchableOpacity>
-                                ) : null}
-                            </View>
-                            <View style={{alignItems: 'center', flexDirection: 'row', marginBottom: 24}}>
-                                <View style={{alignItems: 'center', marginRight: 15}}>
-                                    <TouchableOpacity 
-                                        style={[styles.sizeBtn, size === '200' && {backgroundColor: '#222be6'}]} 
-                                        onPress={() => { setSize('200'); }}
-                                        >
-                                        <Icons type={'size-s'} />
-                                    </TouchableOpacity>
-                                    <Text style={[styles.sizeBtnText, size === '200' && {color: '#222be6'}]}>200 ml</Text>
-                                </View>
-                                <View style={{alignItems: 'center', marginRight: 15}}>
-                                    <TouchableOpacity 
-                                        style={[styles.sizeBtn, size === '300' && {backgroundColor: '#222be6'}]} 
-                                        onPress={() => { setSize('300'); }}
-                                        >
-                                        <Icons type={'size-m'} />
-                                    </TouchableOpacity>
-                                    <Text style={[styles.sizeBtnText, size === '300' && {color: '#222be6'}]}>300 ml</Text>
-                                </View>
-                                <View style={{alignItems: 'center'}}>
-                                    <TouchableOpacity 
-                                        style={[styles.sizeBtn, size === '500' && {backgroundColor: '#222be6'}]} 
-                                        onPress={() => { setSize('500'); }}
-                                        >
-                                        <Icons type={'size-l'} />
-                                    </TouchableOpacity>
-                                    <Text style={[styles.sizeBtnText, size === '500' && {color: '#222be6'}]}>500 ml</Text>
-                                </View>
-                            </View>
-
-                            <Text style={styles.label}>Date</Text>
-                            <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDatePicker(true)}>
-                                <TextInput
-                                    style={[styles.input, {paddingLeft: 60}]}
-                                    placeholder="DD.MM.YYYY"
-                                    placeholderTextColor="#999"
-                                    value={date}
-                                    editable={false}
-                                />
-                                <View style={styles.dateIcon}>
-                                    <Icons type={'date'} />
-                                </View>
-                                {date ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resetInput(setDate)}>
-                                        <Icons type={'cross'} />
-                                    </TouchableOpacity>
-                                ) : null}
-                            </TouchableOpacity>
-                            {showDatePicker && (
-                                <DateTimePicker
-                                    value={date ? new Date(date.split('.').reverse().join('-')) : new Date()} 
-                                    mode="date"
-                                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                                    onChange={handleDateChange}
-                                    themeVariant="dark"
-                                />
-                            )}
-
-                            <Text style={styles.label}>Time</Text>
-                            <TouchableOpacity style={styles.inputContainer} onPress={() => setShowTimePicker(true)}>
-                                <TextInput
-                                    style={[styles.input, {paddingLeft: 60}]}
-                                    placeholder="HH:MM"
-                                    placeholderTextColor="#999"
-                                    value={time}
-                                    editable={false}
-                                />
-                                <View style={styles.dateIcon}>
-                                    <Icons type={'time'} />
-                                </View>
-                                {time ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resetInput(setTime)}>
-                                        <Icons type={'cross'} />
-                                    </TouchableOpacity>
-                                ) : null}
-                            </TouchableOpacity>
-                            {showTimePicker && (
-                                <DateTimePicker
-                                    value={new Date()}
-                                    mode="time"
-                                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                                    onChange={handleTimeChange}
-                                    themeVariant="dark"
-                                />
-                            )}
-
-                            <Text style={styles.label}>Type of a drink</Text>
-                            <View style={styles.inputContainer}>
-                                <TextInput
-                                    style={styles.input}
-                                    keyboardType='numeric'
-                                    placeholder="Press to see options"
-                                    placeholderTextColor="#999"
-                                    value={type}
-                                    onChangeText={setType}
-                                />
-                                <View style={styles.iconsContainer}>
-                                    <TouchableOpacity style={[styles.typeIcon, !showTypes && { transform: [{ rotate: '180deg' }] }]} onPress={handleTypesShow}>
-                                        <Icons type={'type'} />
-                                    </TouchableOpacity>
-                                    {type ? (
-                                        <TouchableOpacity style={{width: 24, height: 24}} onPress={() => resetInput(setType)}>
+                            <ScrollView style={{width: '100%'}}>
+                                <Text style={styles.label}>Name of a drink</Text>
+                                <View style={styles.inputContainer}>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Name"
+                                        placeholderTextColor="#999"
+                                        value={name}
+                                        onChangeText={setName}
+                                    />
+                                    {name ? (
+                                        <TouchableOpacity style={styles.cross} onPress={() => resetInput(setName)}>
                                             <Icons type={'cross'} />
                                         </TouchableOpacity>
                                     ) : null}
                                 </View>
-                            </View>
-                            {
-                                showTypes && (
-                                    <View>
-                                        <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 24}}>
-                                            <Text style={styles.typeText}>Water</Text>
-                                            <TouchableOpacity style={styles.typeBtn} onPress={() => setType('Water')}>
-                                                {
-                                                    type === 'Water' && (
-                                                        <View style={{width: '100%', height: '100%'}}>
-                                                            <Icons type={'yes'} />
-                                                        </View>
-                                                    )
-                                                }
-                                            </TouchableOpacity>
-                                        </View>
-                                        <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 24}}>
-                                            <Text style={styles.typeText}>Coffee</Text>
-                                            <TouchableOpacity style={styles.typeBtn} onPress={() => setType('Coffee')}>
-                                                {
-                                                    type === 'Coffee' && (
-                                                        <View style={{width: '100%', height: '100%'}}>
-                                                            <Icons type={'yes'} />
-                                                        </View>
-                                                    )
-                                                }
-                                            </TouchableOpacity>
-                                        </View>
-                                        <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 24}}>
-                                            <Text style={styles.typeText}>Juice</Text>
-                                            <TouchableOpacity style={styles.typeBtn} onPress={() => setType('Juice')}>
-                                                {
-                                                    type === 'Juice' && (
-                                                        <View style={{width: '100%', height: '100%'}}>
-                                                            <Icons type={'yes'} />
-                                                        </View>
-                                                    )
-                                                }
-                                            </TouchableOpacity>
-                                        </View>
-                                        <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 24}}>
-                                            <Text style={styles.typeText}>Tea</Text>
-                                            <TouchableOpacity style={styles.typeBtn} onPress={() => setType('Tea')}>
-                                                {
-                                                    type === 'Tea' && (
-                                                        <View style={{width: '100%', height: '100%'}}>
-                                                            <Icons type={'yes'} />
-                                                        </View>
-                                                    )
-                                                }
-                                            </TouchableOpacity>
-                                        </View>
-                                        <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 24}}>
-                                            <Text style={styles.typeText}>Soda</Text>
-                                            <TouchableOpacity style={styles.typeBtn} onPress={() => setType('Soda')}>
-                                                {
-                                                    type === 'Soda' && (
-                                                        <View style={{width: '100%', height: '100%'}}>
-                                                            <Icons type={'yes'} />
-                                                        </View>
-                                                    )
-                                                }
-                                            </TouchableOpacity>
-                                        </View>
+
+                                <Text style={styles.label}>Size</Text>
+                                <View style={styles.inputContainer}>
+                                    <TextInput
+                                        style={styles.input}
+                                        keyboardType='numeric'
+                                        placeholder="Choose below or input own"
+                                        placeholderTextColor="#999"
+                                        value={size}
+                                        onChangeText={setSize}
+                                    />
+                                    {size ? (
+                                        <TouchableOpacity style={styles.cross} onPress={() => resetInput(setSize)}>
+                                            <Icons type={'cross'} />
+                                        </TouchableOpacity>
+                                    ) : null}
+                                </View>
+                                <View style={{alignItems: 'center', flexDirection: 'row', marginBottom: 24}}>
+                                    <View style={{alignItems: 'center', marginRight: 15}}>
+                                        <TouchableOpacity 
+                                            style={[styles.sizeBtn, size === '200' && {backgroundColor: '#222be6'}]} 
+                                            onPress={() => { setSize('200'); }}
+                                            >
+                                            <Icons type={'size-s'} />
+                                        </TouchableOpacity>
+                                        <Text style={[styles.sizeBtnText, size === '200' && {color: '#222be6'}]}>200 ml</Text>
                                     </View>
-                                )
-                            }
+                                    <View style={{alignItems: 'center', marginRight: 15}}>
+                                        <TouchableOpacity 
+                                            style={[styles.sizeBtn, size === '300' && {backgroundColor: '#222be6'}]} 
+                                            onPress={() => { setSize('300'); }}
+                                            >
+                                            <Icons type={'size-m'} />
+                                        </TouchableOpacity>
+                                        <Text style={[styles.sizeBtnText, size === '300' && {color: '#222be6'}]}>300 ml</Text>
+                                    </View>
+                                    <View style={{alignItems: 'center'}}>
+                                        <TouchableOpacity 
+                                            style={[styles.sizeBtn, size === '500' && {backgroundColor: '#222be6'}]} 
+                                            onPress={() => { setSize('500'); }}
+                                            >
+                                            <Icons type={'size-l'} />
+                                        </TouchableOpacity>
+                                        <Text style={[styles.sizeBtnText, size === '500' && {color: '#222be6'}]}>500 ml</Text>
+                                    </View>
+                                </View>
 
-                            <View style={{height: 200}} />
-                        </ScrollView>
+                                <Text style={styles.label}>Date</Text>
+                                <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDatePicker(true)}>
+                                    <TextInput
+                                        style={[styles.input, {paddingLeft: 60}]}
+                                        placeholder="DD.MM.YYYY"
+                                        placeholderTextColor="#999"
+                                        value={date}
+                                        editable={false}
+                                    />
+                                    <View style={styles.dateIcon}>
+                                        <Icons type={'date'} />
+                                    </View>
+                                    {date ? (
+                                        <TouchableOpacity style={styles.cross} onPress={() => resetInput(setDate)}>
+                                            <Icons type={'cross'} />
+                                        </TouchableOpacity>
+                                    ) : null}
+                                </TouchableOpacity>
+                                {showDatePicker && (
+                                    <DateTimePicker
+                                        value={date ? new Date(date.split('.').reverse().join('-')) : new Date()} 
+                                        mode="date"
+                                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                                        onChange={handleDateChange}
+                                        themeVariant="dark"
+                                    />
+                                )}
 
-                    </View>
-                )
-            }
+                                <Text style={styles.label}>Time</Text>
+                                <TouchableOpacity style={styles.inputContainer} onPress={() => setShowTimePicker(true)}>
+                                    <TextInput
+                                        style={[styles.input, {paddingLeft: 60}]}
+                                        placeholder="HH:MM"
+                                        placeholderTextColor="#999"
+                                        value={time}
+                                        editable={false}
+                                    />
+                                    <View style={styles.dateIcon}>
+                                        <Icons type={'time'} />
+                                    </View>
+                                    {time ? (
+                                        <TouchableOpacity style={styles.cross} onPress={() => resetInput(setTime)}>
+                                            <Icons type={'cross'} />
+                                        </TouchableOpacity>
+                                    ) : null}
+                                </TouchableOpacity>
+                                {showTimePicker && (
+                                    <DateTimePicker
+                                        value={new Date()}
+                                        mode="time"
+                                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                                        onChange={handleTimeChange}
+                                        themeVariant="dark"
+                                    />
+                                )}
 
-            <TouchableOpacity 
-                style={[styles.saveBtn, 
-                    !name || !size || !date || !time || !type && {backgroundColor: '#2a2a2a'}, 
-                    saved && {backgroundColor: '#b58c32'}
-                ]} 
-                onPress={saved ? navigation.goBack : handleSave}
-                disabled={!saved && !name || !size || !date || !time || !type}
-                >
-                <Text style={styles.saveBtnText}>{saved ? 'Close' : 'Save'}</Text>
-            </TouchableOpacity>
+                                <Text style={styles.label}>Type of a drink</Text>
+                                <View style={styles.inputContainer}>
+                                    <TextInput
+                                        style={styles.input}
+                                        keyboardType='numeric'
+                                        placeholder="Press to see options"
+                                        placeholderTextColor="#999"
+                                        value={type}
+                                        onChangeText={setType}
+                                    />
+                                    <View style={styles.iconsContainer}>
+                                        <TouchableOpacity style={[styles.typeIcon, !showTypes && { transform: [{ rotate: '180deg' }] }]} onPress={handleTypesShow}>
+                                            <Icons type={'type'} />
+                                        </TouchableOpacity>
+                                        {type ? (
+                                            <TouchableOpacity style={{width: 24, height: 24}} onPress={() => resetInput(setType)}>
+                                                <Icons type={'cross'} />
+                                            </TouchableOpacity>
+                                        ) : null}
+                                    </View>
+                                </View>
+                                {
+                                    showTypes && (
+                                        <View>
+                                            <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 24}}>
+                                                <Text style={styles.typeText}>Water</Text>
+                                                <TouchableOpacity style={styles.typeBtn} onPress={() => setType('Water')}>
+                                                    {
+                                                        type === 'Water' && (
+                                                            <View style={{width: '100%', height: '100%'}}>
+                                                                <Icons type={'yes'} />
+                                                            </View>
+                                                        )
+                                                    }
+                                                </TouchableOpacity>
+                                            </View>
+                                            <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 24}}>
+                                                <Text style={styles.typeText}>Coffee</Text>
+                                                <TouchableOpacity style={styles.typeBtn} onPress={() => setType('Coffee')}>
+                                                    {
+                                                        type === 'Coffee' && (
+                                                            <View style={{width: '100%', height: '100%'}}>
+                                                                <Icons type={'yes'} />
+                                                            </View>
+                                                        )
+                                                    }
+                                                </TouchableOpacity>
+                                            </View>
+                                            <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 24}}>
+                                                <Text style={styles.typeText}>Juice</Text>
+                                                <TouchableOpacity style={styles.typeBtn} onPress={() => setType('Juice')}>
+                                                    {
+                                                        type === 'Juice' && (
+                                                            <View style={{width: '100%', height: '100%'}}>
+                                                                <Icons type={'yes'} />
+                                                            </View>
+                                                        )
+                                                    }
+                                                </TouchableOpacity>
+                                            </View>
+                                            <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 24}}>
+                                                <Text style={styles.typeText}>Tea</Text>
+                                                <TouchableOpacity style={styles.typeBtn} onPress={() => setType('Tea')}>
+                                                    {
+                                                        type === 'Tea' && (
+                                                            <View style={{width: '100%', height: '100%'}}>
+                                                                <Icons type={'yes'} />
+                                                            </View>
+                                                        )
+                                                    }
+                                                </TouchableOpacity>
+                                            </View>
+                                            <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 24}}>
+                                                <Text style={styles.typeText}>Soda</Text>
+                                                <TouchableOpacity style={styles.typeBtn} onPress={() => setType('Soda')}>
+                                                    {
+                                                        type === 'Soda' && (
+                                                            <View style={{width: '100%', height: '100%'}}>
+                                                                <Icons type={'yes'} />
+                                                            </View>
+                                                        )
+                                                    }
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    )
+                                }
 
-        </View>
+                                <View style={{height: 200}} />
+                            </ScrollView>
+
+                        </View>
+                    )
+                }
+
+                <TouchableOpacity 
+                    style={[styles.saveBtn, 
+                        !name || !size || !date || !time || !type && {backgroundColor: '#2a2a2a'}, 
+                        saved && {backgroundColor: '#b58c32'}
+                    ]} 
+                    onPress={saved ? navigation.goBack : handleSave}
+                    disabled={!saved && !name || !size || !date || !time || !type}
+                    >
+                    <Text style={styles.saveBtnText}>{saved ? 'Close' : 'Save'}</Text>
+                </TouchableOpacity>
+
+            </View>
+        </ImageBackground>
     )
 };
 
@@ -361,7 +363,6 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#000',
         padding: 20,
         paddingTop: height * 0.07,
         alignItems: 'center'

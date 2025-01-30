@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Dimensions, Image, Modal } from "react-native";
+import { View, TouchableOpacity, Text, StyleSheet, Dimensions, Image, Modal, ImageBackground } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icons from './Icons';
@@ -80,84 +80,85 @@ const Tracker = () => {
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.upperContainer}>
-                <Text style={styles.title}>Water Tracker</Text>
-                <TouchableOpacity onPress={() => navigation.goBack('')}>
-                    <Text style={styles.dateBtn}>Back</Text>
-                </TouchableOpacity>
-            </View>
-
-            {Object.keys(groupedDrinks).length === 0 && (
-                <View style={{width: '100%', alignItems: 'center', marginTop: height * 0.1}}>
-                    <Image source={require('../assets/decor/water.png')} style={styles.noImage} />
-                    <Text style={styles.noText}>There aren’t any drinks recorded yet, please add something</Text>
+        <ImageBackground source={require('../assets/back.png')} style={{flex: 1}}>
+            <View style={styles.container}>
+                <View style={styles.upperContainer}>
+                    <Text style={styles.title}>Water Tracker</Text>
+                    <TouchableOpacity onPress={() => navigation.goBack('')}>
+                        <Text style={styles.dateBtn}>Back</Text>
+                    </TouchableOpacity>
                 </View>
-            )}
 
-            {Object.keys(groupedDrinks).map((date, index) => (
-                <View key={index} style={{width: '100%'}}>
-                    <Text style={styles.dateTitle}>{date}</Text>
-
-                    {groupedDrinks[date].map((drink, index) => (
-                        <View key={index} style={styles.drinkCard}>
-                            <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 12}}>
-                                <Text style={styles.drinkName}>{drink.name}</Text>
-                                <TouchableOpacity 
-                                    style={{width: 24, height: 24}}
-                                    onPress={() => {
-                                        setSelectedDrink(drink);
-                                        setIsModalVisible(true);
-                                    }}
-                                    >
-                                    <Icons type={'dots'} />
-                                </TouchableOpacity>
-                            </View>
-                            <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
-                                <Text style={styles.drinkInfo}>{drink.type} / {drink.size}</Text>
-                                <Text style={styles.drinkTime}>{drink.time}</Text>
-                            </View>
-                        </View>
-                    ))}
-                </View>
-            ))}
-
-            <View style={{height: 200}} />
-
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={isModalVisible}
-                onRequestClose={() => setIsModalVisible(false)}
-            >
-                <View style={styles.modalBackground}>
-                    <View style={styles.modalContainer}>
-                        <Text style={styles.modalTitle}>Delete drink</Text>
-                        <Text style={styles.modalText}>Are you sure you want to delete this drink record?</Text>
-                        <TouchableOpacity 
-                            style={[styles.modalButton, {borderTopColor: '#808080', borderBottomColor: '#808080', borderTopWidth: 0.33, borderBottomWidth: 0.33}]} 
-                            onPress={handleDeleteDrink}
-                        >
-                            <Text style={[styles.modalButtonText, {color: '#ed0103'}]}>Delete</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                            style={styles.modalButton} 
-                            onPress={() => setIsModalVisible(false)}
-                        >
-                            <Text style={[styles.modalButtonText, {color: '#b58c32'}]}>Cancel</Text>
-                        </TouchableOpacity>
+                {Object.keys(groupedDrinks).length === 0 && (
+                    <View style={{width: '100%', alignItems: 'center', marginTop: height * 0.1}}>
+                        <Image source={require('../assets/decor/water.png')} style={styles.noImage} />
+                        <Text style={styles.noText}>There aren’t any drinks recorded yet, please add something</Text>
                     </View>
-                </View>
-            </Modal>
+                )}
 
-        </View>
+                {Object.keys(groupedDrinks).map((date, index) => (
+                    <View key={index} style={{width: '100%'}}>
+                        <Text style={styles.dateTitle}>{date}</Text>
+
+                        {groupedDrinks[date].map((drink, index) => (
+                            <View key={index} style={styles.drinkCard}>
+                                <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 12}}>
+                                    <Text style={styles.drinkName}>{drink.name}</Text>
+                                    <TouchableOpacity 
+                                        style={{width: 24, height: 24}}
+                                        onPress={() => {
+                                            setSelectedDrink(drink);
+                                            setIsModalVisible(true);
+                                        }}
+                                        >
+                                        <Icons type={'dots'} />
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
+                                    <Text style={styles.drinkInfo}>{drink.type} / {drink.size}</Text>
+                                    <Text style={styles.drinkTime}>{drink.time}</Text>
+                                </View>
+                            </View>
+                        ))}
+                    </View>
+                ))}
+
+                <View style={{height: 200}} />
+
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={isModalVisible}
+                    onRequestClose={() => setIsModalVisible(false)}
+                >
+                    <View style={styles.modalBackground}>
+                        <View style={styles.modalContainer}>
+                            <Text style={styles.modalTitle}>Delete drink</Text>
+                            <Text style={styles.modalText}>Are you sure you want to delete this drink record?</Text>
+                            <TouchableOpacity 
+                                style={[styles.modalButton, {borderTopColor: '#808080', borderBottomColor: '#808080', borderTopWidth: 0.33, borderBottomWidth: 0.33}]} 
+                                onPress={handleDeleteDrink}
+                            >
+                                <Text style={[styles.modalButtonText, {color: '#ed0103'}]}>Delete</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                                style={styles.modalButton} 
+                                onPress={() => setIsModalVisible(false)}
+                            >
+                                <Text style={[styles.modalButtonText, {color: '#b58c32'}]}>Cancel</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+
+            </View>
+        </ImageBackground>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#000',
         padding: 20,
         paddingTop: height * 0.07,
         alignItems: 'center',

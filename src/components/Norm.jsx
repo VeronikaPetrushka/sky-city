@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Dimensions, Image } from "react-native"
+import { View, TouchableOpacity, Text, StyleSheet, Dimensions, Image, ImageBackground } from "react-native"
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icons from './Icons';
@@ -39,39 +39,41 @@ const Norm = () => {
     );
 
     return (
-        <View style={styles.container}>
-            <View style={styles.upperContainer}>
-                <Text style={styles.title}>Water Norm</Text>
-                <View style={styles.waterNormBox}>
-                    <Text style={styles.waterNorm}>{score}</Text>
-                    <View style={{width: 21, height: 21, marginLeft: 7}}>
-                        <Icons type={'norm'} />
-                    </View>
-                </View>
-            </View>
-
-            {
-                norm ? (
-                    <View style={{width: 255, height: 285, marginVertical: 'auto'}}>
-                        <Image source={require('../assets/decor/saved.png')} style={{width: '100%', height: '100%', resizeMode: 'contain'}} />
-                        <View style={styles.savedNormContainer}>
-                            <Text style={styles.normText}>{norm.norm} ml</Text>
-                            <Text style={styles.normSubText}>per day</Text>
+        <ImageBackground source={require('../assets/back.png')} style={{flex: 1}}>
+            <View style={styles.container}>
+                <View style={styles.upperContainer}>
+                    <Text style={styles.title}>Water Norm</Text>
+                    <View style={styles.waterNormBox}>
+                        <Text style={styles.waterNorm}>{score}</Text>
+                        <View style={{width: 21, height: 21, marginLeft: 7}}>
+                            <Icons type={'norm'} />
                         </View>
                     </View>
-                ) : (
-                    <View style={{width: '100%', alignItems: 'center', marginVertical: 'auto'}}>
-                        <Image source={require('../assets/decor/water.png')} style={styles.noImage} />
-                        <Text style={styles.noText}>There is no information about your daily water norm</Text>
-                    </View>
-                )
-            }
+                </View>
 
-            <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('AddNormScreen', norm && {item: norm})}>
-                <Text style={styles.addBtnText}>{!norm ? 'Add information' : 'Edit norm'}</Text>
-            </TouchableOpacity>    
+                {
+                    norm ? (
+                        <View style={{width: 255, height: 285, marginVertical: 'auto'}}>
+                            <Image source={require('../assets/decor/saved.png')} style={{width: '100%', height: '100%', resizeMode: 'contain'}} />
+                            <View style={styles.savedNormContainer}>
+                                <Text style={styles.normText}>{norm.norm} ml</Text>
+                                <Text style={styles.normSubText}>per day</Text>
+                            </View>
+                        </View>
+                    ) : (
+                        <View style={{width: '100%', alignItems: 'center', marginVertical: 'auto'}}>
+                            <Image source={require('../assets/decor/water.png')} style={styles.noImage} />
+                            <Text style={styles.noText}>There is no information about your daily water norm</Text>
+                        </View>
+                    )
+                }
 
-        </View>
+                <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('AddNormScreen', norm && {item: norm})}>
+                    <Text style={styles.addBtnText}>{!norm ? 'Add information' : 'Edit norm'}</Text>
+                </TouchableOpacity>    
+
+            </View>
+        </ImageBackground>
     )
 };
 
@@ -79,7 +81,6 @@ const styles= StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#000',
         padding: 20,
         paddingTop: height * 0.07,
         alignItems: 'center'

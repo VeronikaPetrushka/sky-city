@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Dimensions, TouchableOpacity, Text, TextInput, Image } from "react-native"
+import { StyleSheet, View, Dimensions, TouchableOpacity, Text, TextInput, Image, ImageBackground } from "react-native"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 import Icons from "./Icons";
@@ -74,119 +74,121 @@ const AddNorm = ({ item }) => {
     };
     
     return (
-        <View style={styles.container}>
+        <ImageBackground source={require('../assets/back.png')} style={{flex: 1}}>
+            <View style={styles.container}>
 
-            <TouchableOpacity 
-                style={{alignSelf: 'flex-start', alignItems: 'center', marginBottom: 20, flexDirection: 'row'}}
-                onPress={() => navigation.goBack('')}
-                >
-                <View style={{height: 17, width: 12, marginRight: 10}}>
-                    <Icons type={'back'} />
-                </View>
-                <Text style={styles.backText}>Back</Text>
-            </TouchableOpacity>
-
-            {
-                saved ? (
-                    <View style={{width: '100%', height: '90%', alignItems: 'center',}}>
-                        <Text style={styles.title}>{item ? 'Your water norm is updated' : 'Your water norm is created'}</Text>
-                        <View style={{width: 255, height: 285, marginVertical: 'auto'}}>
-                            <Image source={require('../assets/decor/saved.png')} style={{width: '100%', height: '100%', resizeMode: 'contain'}} />
-                            <View style={styles.savedNormContainer}>
-                                <Text style={styles.normText}>{norm} ml</Text>
-                                <Text style={styles.normSubText}>per day</Text>
-                            </View>
-                        </View>
+                <TouchableOpacity 
+                    style={{alignSelf: 'flex-start', alignItems: 'center', marginBottom: 20, flexDirection: 'row'}}
+                    onPress={() => navigation.goBack('')}
+                    >
+                    <View style={{height: 17, width: 12, marginRight: 10}}>
+                        <Icons type={'back'} />
                     </View>
-                ) : (
-                    <View style={{width: '100%', alignItems: 'flex-start'}}>
-                        <Text style={styles.title}>{item ? 'Edit norm': 'Create norm'}</Text>
+                    <Text style={styles.backText}>Back</Text>
+                </TouchableOpacity>
 
-                        <Text style={styles.label}>Goal</Text>
-                        <View style={styles.goalBtnsContainer}>
-                            <TouchableOpacity 
-                                style={[goal === 'Maintenance' ? styles.goalBtnChosen : styles.goalBtn]} 
-                                onPress={() => setGoal('Maintenance')}
-                                >
-                                <Text style={styles.goalBtnText}>Maintenance</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity 
-                                style={[goal === 'Weight loss' ? styles.goalBtnChosen : styles.goalBtn]} 
-                                onPress={() => setGoal('Weight loss')}
-                                >
-                                <Text style={styles.goalBtnText}>Weight loss</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexDirection: 'row'}}>
-                            <View style={{width: '48%'}}>
-                                <Text style={styles.label}>Height</Text>
-                                <View style={styles.inputContainer}>
-                                    <TextInput
-                                        style={styles.input}
-                                        keyboardType='numeric'
-                                        placeholder="Value"
-                                        placeholderTextColor="#999"
-                                        value={height}
-                                        onChangeText={setHeight}
-                                    />
-                                    {height ? (
-                                        <TouchableOpacity style={styles.cross} onPress={() => resetInput(setHeight)}>
-                                            <Icons type={'cross'} />
-                                        </TouchableOpacity>
-                                    ) : null}
-                                </View>
-                            </View>
-                            <View style={{width: '48%'}}>
-                                <Text style={styles.label}>Weight</Text>
-                                <View style={styles.inputContainer}>
-                                    <TextInput
-                                        style={styles.input}
-                                        keyboardType='numeric'
-                                        placeholder="Value"
-                                        placeholderTextColor="#999"
-                                        value={weight}
-                                        onChangeText={setWeight}
-                                    />
-                                    {weight ? (
-                                        <TouchableOpacity style={styles.cross} onPress={() => resetInput(setWeight)}>
-                                            <Icons type={'cross'} />
-                                        </TouchableOpacity>
-                                    ) : null}
+                {
+                    saved ? (
+                        <View style={{width: '100%', height: '90%', alignItems: 'center',}}>
+                            <Text style={styles.title}>{item ? 'Your water norm is updated' : 'Your water norm is created'}</Text>
+                            <View style={{width: 255, height: 285, marginVertical: 'auto'}}>
+                                <Image source={require('../assets/decor/saved.png')} style={{width: '100%', height: '100%', resizeMode: 'contain'}} />
+                                <View style={styles.savedNormContainer}>
+                                    <Text style={styles.normText}>{norm} ml</Text>
+                                    <Text style={styles.normSubText}>per day</Text>
                                 </View>
                             </View>
                         </View>
+                    ) : (
+                        <View style={{width: '100%', alignItems: 'flex-start'}}>
+                            <Text style={styles.title}>{item ? 'Edit norm': 'Create norm'}</Text>
 
-                        <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
-                            <Text style={[styles.label, {marginBottom: 0}]}>Excess weight</Text>
-                            <TouchableOpacity style={styles.excessBtn} onPress={handleExcess}>
-                                {
-                                    isExcess ? (
-                                        <View style={{width: '100%', height: '100%'}}>
-                                            <Icons type={'yes'} />
-                                        </View>
-                                    ) : (
-                                        <View />
-                                    )
-                                }
-                            </TouchableOpacity>
+                            <Text style={styles.label}>Goal</Text>
+                            <View style={styles.goalBtnsContainer}>
+                                <TouchableOpacity 
+                                    style={[goal === 'Maintenance' ? styles.goalBtnChosen : styles.goalBtn]} 
+                                    onPress={() => setGoal('Maintenance')}
+                                    >
+                                    <Text style={styles.goalBtnText}>Maintenance</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity 
+                                    style={[goal === 'Weight loss' ? styles.goalBtnChosen : styles.goalBtn]} 
+                                    onPress={() => setGoal('Weight loss')}
+                                    >
+                                    <Text style={styles.goalBtnText}>Weight loss</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexDirection: 'row'}}>
+                                <View style={{width: '48%'}}>
+                                    <Text style={styles.label}>Height</Text>
+                                    <View style={styles.inputContainer}>
+                                        <TextInput
+                                            style={styles.input}
+                                            keyboardType='numeric'
+                                            placeholder="Value"
+                                            placeholderTextColor="#999"
+                                            value={height}
+                                            onChangeText={setHeight}
+                                        />
+                                        {height ? (
+                                            <TouchableOpacity style={styles.cross} onPress={() => resetInput(setHeight)}>
+                                                <Icons type={'cross'} />
+                                            </TouchableOpacity>
+                                        ) : null}
+                                    </View>
+                                </View>
+                                <View style={{width: '48%'}}>
+                                    <Text style={styles.label}>Weight</Text>
+                                    <View style={styles.inputContainer}>
+                                        <TextInput
+                                            style={styles.input}
+                                            keyboardType='numeric'
+                                            placeholder="Value"
+                                            placeholderTextColor="#999"
+                                            value={weight}
+                                            onChangeText={setWeight}
+                                        />
+                                        {weight ? (
+                                            <TouchableOpacity style={styles.cross} onPress={() => resetInput(setWeight)}>
+                                                <Icons type={'cross'} />
+                                            </TouchableOpacity>
+                                        ) : null}
+                                    </View>
+                                </View>
+                            </View>
+
+                            <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row'}}>
+                                <Text style={[styles.label, {marginBottom: 0}]}>Excess weight</Text>
+                                <TouchableOpacity style={styles.excessBtn} onPress={handleExcess}>
+                                    {
+                                        isExcess ? (
+                                            <View style={{width: '100%', height: '100%'}}>
+                                                <Icons type={'yes'} />
+                                            </View>
+                                        ) : (
+                                            <View />
+                                        )
+                                    }
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
-                )
-            }
+                    )
+                }
 
-            <TouchableOpacity 
-                style={[styles.saveBtn, 
-                    !height || !weight && {backgroundColor: '#2c2c2c2'}, 
-                    saved && {backgroundColor: '#b58c32'}
-                ]} 
-                onPress={saved ? navigation.goBack : handleSave}
-                disabled={!saved && !height || !weight}
-                >
-                <Text style={styles.saveBtnText}>{saved ? 'Close' : 'Save'}</Text>
-            </TouchableOpacity>
+                <TouchableOpacity 
+                    style={[styles.saveBtn, 
+                        !height || !weight && {backgroundColor: '#2c2c2c2'}, 
+                        saved && {backgroundColor: '#b58c32'}
+                    ]} 
+                    onPress={saved ? navigation.goBack : handleSave}
+                    disabled={!saved && !height || !weight}
+                    >
+                    <Text style={styles.saveBtnText}>{saved ? 'Close' : 'Save'}</Text>
+                </TouchableOpacity>
 
-        </View>
+            </View>
+        </ImageBackground>
     )
 };
 
@@ -194,7 +196,6 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#000',
         padding: 20,
         paddingTop: height * 0.07,
         alignItems: 'center'
